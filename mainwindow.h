@@ -8,6 +8,7 @@
 #include <QTimer>
 #include <vector>
 #include <QRandomGenerator>
+#include <array>
 
 namespace Ui {
 class MainWindow;
@@ -24,23 +25,28 @@ public:
 public slots:
     void createRandomPattern();
     void optimizePattern();
-    void nextIteration();
+    void nextGeneration();
     void stopOptimization();
 
 private:
     void setupUi();
+    double calculateFitness(const std::array<std::array<int, 10>, 10>& matrix);
+    void createPopulation();
+    void selection();
+    void crossover();
+    void mutation();
+    void updateBestIndividual();
+    void updateMatrixDisplay();
+    void updateMatrixText();
+    void printMatrix(const std::array<std::array<int, 10>, 10>& matrix);
 
     Ui::MainWindow *ui;
     std::vector<QLabel*> labels;
     std::vector<QLabel*> finalLabels;
     QTimer *optimizationTimer;
 
-    int currentMatrix[10][10] = {};
-    int optimizationStep;
-    int bestNeighborCost;
-    int bestRow;
-    int bestCol;
-    int finalMatrix[10][10] = {
+    std::array<std::array<int, 10>, 10> currentMatrix = {};
+    std::array<std::array<int, 10>, 10> finalMatrix = {{
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
         {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
@@ -51,13 +57,13 @@ private:
         {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
         {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
-
-    int calculateCost(int matrix1[10][10], int matrix2[10][10]);
-    void updateMatrixDisplay();
-    void updateMatrixText();
-    void printMatrix(int matrix[10][10]);
-
+    }};
+    std::vector<std::array<std::array<int, 10>, 10>> population;
+    std::array<std::array<int, 10>, 10> bestIndividual;
+    int generation;
+    int populationSize;
+    int maxGenerations;
+    const double mutationRate = 0.02; // 2% mutation rate
 };
 
 #endif // MAINWINDOW_H
