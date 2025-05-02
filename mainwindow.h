@@ -21,12 +21,21 @@ public:
 
 public slots:
     void createRandomPattern();
+    void optimizePattern();
 
 private:
     void setupUi();
 
     Ui::MainWindow *ui;
     std::vector<QLabel*> labels;
+    std::vector<QLabel*> finalLabels;
+    int currentMatrix[10][10] = {};
+
+    int calculateCost(int matrix1[10][10], int matrix2[10][10]);
+    void updateMatrixDisplay();
+    void updateMatrixText();
+    void printMatrix(int matrix[10][10]);
+
 };
 
 #endif // MAINWINDOW_H
