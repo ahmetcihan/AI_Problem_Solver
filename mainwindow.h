@@ -5,7 +5,9 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QWidget>
+#include <QTimer>
 #include <vector>
+#include <QRandomGenerator>
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +24,7 @@ public:
 public slots:
     void createRandomPattern();
     void optimizePattern();
+    void nextIteration();
 
 private:
     void setupUi();
@@ -29,7 +32,13 @@ private:
     Ui::MainWindow *ui;
     std::vector<QLabel*> labels;
     std::vector<QLabel*> finalLabels;
+    QTimer *optimizationTimer;
+
     int currentMatrix[10][10] = {};
+    int optimizationStep;
+    int bestNeighborCost;
+    int bestRow;
+    int bestCol;
 
     int calculateCost(int matrix1[10][10], int matrix2[10][10]);
     void updateMatrixDisplay();

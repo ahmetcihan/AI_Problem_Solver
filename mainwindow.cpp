@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QRandomGenerator>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -9,6 +8,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     setupUi();
     setWindowTitle("AI Problem Solver");
+    optimizationStep = 0;
+    bestNeighborCost = 0;
+    bestRow = -1;
+    bestCol = -1;
 }
 
 MainWindow::~MainWindow()
@@ -65,6 +68,10 @@ void MainWindow::setupUi()
         finalMatrixText += "\n";
     }
     ui->textEditFinalMatrix->setText(finalMatrixText);
+
+    // Initialize timer
+    optimizationTimer = new QTimer(this);
+    connect(optimizationTimer, &QTimer::timeout, this, &MainWindow::nextIteration);
 }
 
 void MainWindow::createRandomPattern()
@@ -83,6 +90,7 @@ void MainWindow::createRandomPattern()
 }
 void MainWindow::optimizePattern()
 {
+
     int finalMatrix[10][10] = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -100,41 +108,62 @@ void MainWindow::optimizePattern()
     qDebug() << "Initial Cost:" << bestCost;
     printMatrix(currentMatrix);
 
-    int iterations = 0;
-    const int maxIterations = 1000;
-    while (iterations < maxIterations) {
-        int bestNeighborCost = bestCost;
-        int bestRow = -1, bestCol = -1;
+    // Reset optimization state
+    optimizationStep = 0;
+    bestNeighborCost = bestCost;
 
-        // Komşu çözümleri değerlendir (her hücreyi tersine çevir)
-        for (int row = 0; row < 10; ++row) {
-            for (int col = 0; col < 10; ++col) {
-                int tempMatrix[10][10];
-                memcpy(tempMatrix, currentMatrix, sizeof(currentMatrix));
-                tempMatrix[row][col] = 1 - tempMatrix[row][col]; // Hücreyi tersine çevir
-                int neighborCost = calculateCost(tempMatrix, finalMatrix);
-                if (neighborCost < bestNeighborCost) {
-                    bestNeighborCost = neighborCost;
-                    bestRow = row;
-                    bestCol = col;
-                }
-            }
-        }
-
-        if (bestNeighborCost < bestCost) {
-            currentMatrix[bestRow][bestCol] = 1 - currentMatrix[bestRow][bestCol];
-            bestCost = bestNeighborCost;
-            updateMatrixDisplay();
-            qDebug() << "Iteration" << iterations << "Cost:" << bestCost;
-            printMatrix(currentMatrix);
-        } else {
-            break; // Yerel minimuma ulaşıldı
-        }
-        iterations++;
-    }
-    qDebug() << "Final Cost:" << bestCost;
+    // Start the optimization process with timer
+    optimizationTimer->start(ui->spinBoxTickInterval->value());
 }
+void MainWindow::nextIteration()
+{
+    int finalMatrix[10][10] = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
+        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
+        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
+        {0, 1, 0, 1, 1, 1, 1, 0, 1, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    };
 
+    int currentCost = calculateCost(currentMatrix, finalMatrix);
+    if (optimizationStep == 0) {
+        qDebug() << "Initial Cost:" << currentCost;
+        printMatrix(currentMatrix);
+    }
+
+    // Select a random cell
+    int row = QRandomGenerator::global()->bounded(10);
+    int col = QRandomGenerator::global()->bounded(10);
+    int tempMatrix[10][10];
+    memcpy(tempMatrix, currentMatrix, sizeof(currentMatrix));
+    tempMatrix[row][col] = 1 - tempMatrix[row][col];
+    int newCost = calculateCost(tempMatrix, finalMatrix);
+
+    if (newCost < currentCost) {
+        currentMatrix[row][col] = tempMatrix[row][col];
+        updateMatrixDisplay();
+        qDebug() << "Iteration" << optimizationStep << "Cost:" << newCost;
+        printMatrix(currentMatrix);
+        bestNeighborCost = newCost;
+    } else {
+        // If no improvement, still update display to show the attempt
+        updateMatrixDisplay();
+        qDebug() << "Iteration" << optimizationStep << "Cost (no change):" << currentCost;
+        printMatrix(currentMatrix);
+    }
+
+    optimizationStep++;
+    if (optimizationStep >= 1000 || currentCost == 0) {
+        qDebug() << "Final Cost:" << calculateCost(currentMatrix, finalMatrix);
+        optimizationTimer->stop();
+        return;
+    }
+}
 int MainWindow::calculateCost(int matrix1[10][10], int matrix2[10][10])
 {
     int cost = 0;
