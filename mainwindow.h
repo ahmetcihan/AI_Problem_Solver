@@ -25,6 +25,7 @@ public slots:
     void createRandomPattern();
     void optimizePattern();
     void nextIteration();
+    void stopOptimization();
 
 private:
     void setupUi();
@@ -39,6 +40,18 @@ private:
     int bestNeighborCost;
     int bestRow;
     int bestCol;
+    int finalMatrix[10][10] = {
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
+        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
+        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
+        {0, 1, 0, 1, 1, 1, 1, 0, 1, 0},
+        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
+        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+    };
 
     int calculateCost(int matrix1[10][10], int matrix2[10][10]);
     void updateMatrixDisplay();

@@ -83,8 +83,8 @@
    <widget class="QSpinBox" name="spinBoxTickInterval">
     <property name="geometry">
      <rect>
-      <x>370</x>
-      <y>140</y>
+      <x>380</x>
+      <y>280</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -94,6 +94,19 @@
     </property>
     <property name="value">
      <number>100</number>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_stop_optimization">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>130</y>
+      <width>141</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stop Optimization</string>
     </property>
    </widget>
   </widget>

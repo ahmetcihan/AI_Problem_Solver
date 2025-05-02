@@ -34,20 +34,9 @@ void MainWindow::setupUi()
 
     connect(ui->pushButton_create_random_pattern, &QPushButton::clicked, this, &MainWindow::createRandomPattern);
     connect(ui->pushButton_start_optimization, &QPushButton::clicked, this, &MainWindow::optimizePattern);
+    connect(ui->pushButton_stop_optimization, &QPushButton::clicked, this, &MainWindow::stopOptimization);
 
     finalLabels.clear();
-    int finalMatrix[10][10] = {
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
-        {0, 1, 0, 1, 1, 1, 1, 0, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
 
     for (int row = 0; row < 10; ++row) {
         for (int col = 0; col < 10; ++col) {
@@ -73,7 +62,13 @@ void MainWindow::setupUi()
     optimizationTimer = new QTimer(this);
     connect(optimizationTimer, &QTimer::timeout, this, &MainWindow::nextIteration);
 }
-
+void MainWindow::stopOptimization()
+{
+    // Stop the timer to pause optimization
+    optimizationTimer->stop();
+    qDebug() << "Optimization stopped manually. Final Cost:" << calculateCost(currentMatrix, finalMatrix);
+    printMatrix(currentMatrix);
+}
 void MainWindow::createRandomPattern()
 {
     QString matrixText;
@@ -91,19 +86,6 @@ void MainWindow::createRandomPattern()
 void MainWindow::optimizePattern()
 {
 
-    int finalMatrix[10][10] = {
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
-        {0, 1, 0, 1, 1, 1, 1, 0, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
-
     int bestCost = calculateCost(currentMatrix, finalMatrix);
     qDebug() << "Initial Cost:" << bestCost;
     printMatrix(currentMatrix);
@@ -117,19 +99,6 @@ void MainWindow::optimizePattern()
 }
 void MainWindow::nextIteration()
 {
-    int finalMatrix[10][10] = {
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 0, 1, 0, 0, 1, 0, 1, 0},
-        {0, 1, 0, 1, 1, 1, 1, 0, 1, 0},
-        {0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-        {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-    };
-
     int currentCost = calculateCost(currentMatrix, finalMatrix);
     if (optimizationStep == 0) {
         qDebug() << "Initial Cost:" << currentCost;
