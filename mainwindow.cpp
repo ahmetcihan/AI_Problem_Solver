@@ -1,18 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QRandomGenerator>
-#include <QDebug>
-#include <algorithm>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowTitle("MFA501 Assessment 3 - Ahmet Cihan AKINCA - Genetic Algorithm");
     setupUi();
-    setWindowTitle("AI Problem Solver");
-    generation = 0;
-    startTime = 0;
 }
 
 MainWindow::~MainWindow()
@@ -22,6 +17,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupUi()
 {
+    // user interface initilization
+    generation = 0;
+    startTime = 0;
+    ui->label_indicator->setText("iteration no: 0\nerror: 0\nelapsed time: 0 sec");
     labels.clear();
     for (int row = 0; row < 10; ++row) {
         for (int col = 0; col < 10; ++col) {
@@ -33,10 +32,16 @@ void MainWindow::setupUi()
         }
     }
 
+    //button signal to slot function connections
     connect(ui->pushButton_create_random_pattern, &QPushButton::clicked, this, &MainWindow::createRandomPattern);
     connect(ui->pushButton_start_optimization, &QPushButton::clicked, this, &MainWindow::optimizePattern);
     connect(ui->pushButton_stop_optimization, &QPushButton::clicked, this, &MainWindow::stopOptimization);
 
+    //create a timer for iterations
+    optimizationTimer = new QTimer(this);
+    connect(optimizationTimer, &QTimer::timeout, this, &MainWindow::nextGeneration);
+
+    //final image creation
     finalLabels.clear();
     for (int row = 0; row < 10; ++row) {
         for (int col = 0; col < 10; ++col) {
@@ -48,7 +53,7 @@ void MainWindow::setupUi()
             finalLabels.push_back(label);
         }
     }
-
+    //matrix for final image
     QString finalMatrixText;
     for (int row = 0; row < 10; ++row) {
         for (int col = 0; col < 10; ++col) {
@@ -58,15 +63,11 @@ void MainWindow::setupUi()
     }
     ui->textEditFinalMatrix->setText(finalMatrixText);
 
-    optimizationTimer = new QTimer(this);
-    connect(optimizationTimer, &QTimer::timeout, this, &MainWindow::nextGeneration);
-    ui->label_indicator->setText("iteration no: 0\nerror: 0\nelapsed time: 0 sec");
 }
 
 void MainWindow::stopOptimization()
 {
     optimizationTimer->stop();
-    qDebug() << "Optimization stopped manually. Final Cost:" << (100 - calculateFitness(bestIndividual) * 100);
     printMatrix(bestIndividual);
 }
 
@@ -74,6 +75,7 @@ void MainWindow::createRandomPattern()
 {
     population.clear();
     populationSize = ui->spinBox_population_size->value();
+
     for (int i = 0; i < populationSize; ++i) {
         std::array<std::array<int, 10>, 10> matrix;
         for (int row = 0; row < 10; ++row) {
@@ -92,11 +94,13 @@ void MainWindow::optimizePattern()
     populationSize = ui->spinBox_population_size->value();
     maxGenerations = ui->spinBox_max_generations->value();
     generation = 0;
+
     startTime = QDateTime::currentMSecsSinceEpoch(); // Start time for elapsed time
-    if (population.empty()) {
+
+    if (population.empty()) {   //create a random pattern if not clicked to "generate random input pattern"
         createPopulation();
     }
-    optimizationTimer->start(ui->spinBoxTickInterval->value());
+    optimizationTimer->start(ui->spinBoxTickInterval->value()); //start optimization process (calls nextGeneration)
 }
 
 void MainWindow::nextGeneration()
@@ -107,14 +111,14 @@ void MainWindow::nextGeneration()
         return;
     }
 
-    // Step 3: Calculate cost for all individuals
+    // calculate costs
     std::vector<std::pair<double, std::array<std::array<int, 10>, 10>>> fitnessPopulation;
     for (const auto& individual : population) {
         double fitness = calculateFitness(individual);
         fitnessPopulation.emplace_back(fitness, individual);
     }
 
-    // Step 4: Select the best individuals (10% of populationSize)
+    //select the best individuals (10% of populationSize)
     std::sort(fitnessPopulation.begin(), fitnessPopulation.end(), [](const auto& a, const auto& b) {
         return a.first > b.first; // Sort by fitness (highest first)
     });
@@ -124,47 +128,47 @@ void MainWindow::nextGeneration()
         elite.push_back(fitnessPopulation[i].second);
     }
 
-    // Step 5: Create new population
+    //create new population
     population.clear();
     // Add elite individuals (10%)
     for (const auto& individual : elite) {
         population.push_back(individual);
     }
 
-    // Step 6: Generate new individuals
+    //generate new individuals
     int crossoverIndividuals = populationSize * 0.20; // 20% via crossover
     int mutationIndividuals = populationSize * 0.20; // 20% via mutation
     int randomIndividuals = populationSize * 0.50; // 50% completely random
 
-    // Generate individuals via crossover (20%)
+    //generate individuals via crossover (20%)
     for (int i = 0; i < crossoverIndividuals; ++i) {
-        // Select two different parents from elite
+        //select two random parents from elite
         int parent1Idx = QRandomGenerator::global()->bounded(elite.size());
         int parent2Idx;
         do {
             parent2Idx = QRandomGenerator::global()->bounded(elite.size());
         } while (parent2Idx == parent1Idx);
+
         std::array<std::array<int, 10>, 10> parent1 = elite[parent1Idx];
         std::array<std::array<int, 10>, 10> parent2 = elite[parent2Idx];
         std::array<std::array<int, 10>, 10> child;
 
-        // Uniform Crossover
+        //uniform crossover
         for (int row = 0; row < 10; ++row) {
             for (int col = 0; col < 10; ++col) {
                 child[row][col] = QRandomGenerator::global()->bounded(2) ? parent1[row][col] : parent2[row][col];
             }
         }
-
         population.push_back(child);
     }
-    // Generate individuals via mutation (20%)
+
+    //generate individuals via mutation (20%)
     for (int i = 0; i < mutationIndividuals; ++i) {
         // Select one parent from elite
         int parentIdx = QRandomGenerator::global()->bounded(elite.size());
         std::array<std::array<int, 10>, 10> child = elite[parentIdx]; // Copy the parent
 
-        // Mutation with 15% rate
-        double mutationRate = 0.25;
+        double mutationRate = 0.5;
         for (int row = 0; row < 10; ++row) {
             for (int col = 0; col < 10; ++col) {
                 if (QRandomGenerator::global()->bounded(1.0) < mutationRate) {
@@ -224,24 +228,9 @@ void MainWindow::createPopulation()
     }
     updateBestIndividual();
 }
-
-void MainWindow::selection()
-{
-    // No separate selection, handled in nextGeneration
-}
-
-void MainWindow::crossover()
-{
-    // No separate crossover, handled in nextGeneration
-}
-
-void MainWindow::mutation()
-{
-    // No separate mutation, handled in nextGeneration
-}
-
 void MainWindow::updateBestIndividual()
 {
+    //this code finds best matrix
     double bestFitness = 0.0;
     for (const auto& individual : population) {
         double fitness = calculateFitness(individual);
@@ -272,11 +261,6 @@ void MainWindow::updateMatrixDisplay()
                                              .arg(bestIndividual[row][col] == 1 ? "blue" : "yellow"));
         }
     }
-    updateMatrixText();
-}
-
-void MainWindow::updateMatrixText()
-{
     QString matrixText;
     for (int row = 0; row < 10; ++row) {
         for (int col = 0; col < 10; ++col) {

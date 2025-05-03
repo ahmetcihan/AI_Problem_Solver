@@ -10,6 +10,8 @@
 #include <QRandomGenerator>
 #include <array>
 #include <QDateTime>
+#include <QRandomGenerator>
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
@@ -33,12 +35,8 @@ private:
     void setupUi();
     double calculateFitness(const std::array<std::array<int, 10>, 10>& matrix);
     void createPopulation();
-    void selection();
-    void crossover();
-    void mutation();
     void updateBestIndividual();
     void updateMatrixDisplay();
-    void updateMatrixText();
     void printMatrix(const std::array<std::array<int, 10>, 10>& matrix);
 
     Ui::MainWindow *ui;
@@ -50,8 +48,7 @@ private:
     int generation;
     int populationSize;
     int maxGenerations;
-    const double mutationRate = 0.02; // 2% mutation rate
-    qint64 startTime; // Elapsed time için başlangıç zamanı
+    qint64 startTime;
 
     std::array<std::array<int, 10>, 10> currentMatrix = {};
     std::array<std::array<int, 10>, 10> finalMatrix = {{
