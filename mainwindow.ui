@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>902</width>
-    <height>552</height>
+    <height>624</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>20</y>
+      <y>40</y>
       <width>300</width>
       <height>300</height>
      </rect>
@@ -30,7 +30,7 @@
       <x>360</x>
       <y>20</y>
       <width>180</width>
-      <height>41</height>
+      <height>51</height>
      </rect>
     </property>
     <property name="font">
@@ -39,14 +39,15 @@
      </font>
     </property>
     <property name="text">
-     <string>Create Random Pattern</string>
+     <string>Create Random
+Input Pattern</string>
     </property>
    </widget>
    <widget class="QWidget" name="widgetFinalPattern" native="true">
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>20</y>
+      <y>40</y>
       <width>300</width>
       <height>300</height>
      </rect>
@@ -56,7 +57,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>330</y>
+      <y>340</y>
       <width>301</width>
       <height>201</height>
      </rect>
@@ -71,7 +72,7 @@
     <property name="geometry">
      <rect>
       <x>580</x>
-      <y>330</y>
+      <y>340</y>
       <width>301</width>
       <height>201</height>
      </rect>
@@ -86,7 +87,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>80</y>
+      <y>100</y>
       <width>180</width>
       <height>41</height>
      </rect>
@@ -104,7 +105,7 @@
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>200</y>
+      <y>220</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -125,7 +126,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>130</y>
+      <y>150</y>
       <width>180</width>
       <height>41</height>
      </rect>
@@ -143,7 +144,7 @@
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>200</y>
+      <y>220</y>
       <width>150</width>
       <height>31</height>
      </rect>
@@ -161,7 +162,7 @@
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>240</y>
+      <y>260</y>
       <width>150</width>
       <height>31</height>
      </rect>
@@ -179,7 +180,7 @@
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>240</y>
+      <y>260</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -203,7 +204,7 @@
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>280</y>
+      <y>300</y>
       <width>150</width>
       <height>31</height>
      </rect>
@@ -221,7 +222,7 @@
     <property name="geometry">
      <rect>
       <x>480</x>
-      <y>280</y>
+      <y>300</y>
       <width>71</width>
       <height>31</height>
      </rect>
@@ -239,6 +240,71 @@
     </property>
     <property name="value">
      <number>200</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>10</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>INITIAL PATTERN</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>580</x>
+      <y>10</y>
+      <width>300</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>TARGET PATTERN</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_indicator">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>340</y>
+      <width>231</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Iteration no: 0 Error: 0 </string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
   </widget>

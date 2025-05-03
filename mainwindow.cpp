@@ -7,11 +7,12 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , generation(0)
 {
     ui->setupUi(this);
     setupUi();
     setWindowTitle("AI Problem Solver");
+    generation = 0;
+    startTime = 0;
 }
 
 MainWindow::~MainWindow()
@@ -59,6 +60,7 @@ void MainWindow::setupUi()
 
     optimizationTimer = new QTimer(this);
     connect(optimizationTimer, &QTimer::timeout, this, &MainWindow::nextGeneration);
+    ui->label_indicator->setText("iteration no: 0\nerror: 0\nelapsed time: 0 sec");
 }
 
 void MainWindow::stopOptimization()
@@ -90,6 +92,7 @@ void MainWindow::optimizePattern()
     populationSize = ui->spinBox_population_size->value();
     maxGenerations = ui->spinBox_max_generations->value();
     generation = 0;
+    startTime = QDateTime::currentMSecsSinceEpoch(); // Start time for elapsed time
     if (population.empty()) {
         createPopulation();
     }
@@ -186,6 +189,15 @@ void MainWindow::nextGeneration()
 
     updateBestIndividual();
     updateMatrixDisplay();
+
+    // Update label_indicator with iteration, error, and elapsed time
+    qint64 currentTime = QDateTime::currentMSecsSinceEpoch();
+    double elapsedTimeSec = (currentTime - startTime) / 1000.0; // Saniye cinsinden, ondalıklı
+    int error = static_cast<int>(100 - calculateFitness(bestIndividual) * 100); // Cost as error
+    ui->label_indicator->setText(QString("iteration no: %1\nerror: %2\nelapsed time: %3 sec")
+                                     .arg(generation)
+                                     .arg(error)
+                                     .arg(elapsedTimeSec, 0, 'f', 1)); // 1 ondalık basamak
 
     qDebug() << "Generation" << generation << "Best Cost:" << (100 - calculateFitness(bestIndividual) * 100);
     printMatrix(bestIndividual);

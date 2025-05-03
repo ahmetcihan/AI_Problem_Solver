@@ -9,6 +9,7 @@
 #include <vector>
 #include <QRandomGenerator>
 #include <array>
+#include <QDateTime>
 
 namespace Ui {
 class MainWindow;
@@ -44,6 +45,13 @@ private:
     std::vector<QLabel*> labels;
     std::vector<QLabel*> finalLabels;
     QTimer *optimizationTimer;
+    std::vector<std::array<std::array<int, 10>, 10>> population;
+    std::array<std::array<int, 10>, 10> bestIndividual;
+    int generation;
+    int populationSize;
+    int maxGenerations;
+    const double mutationRate = 0.02; // 2% mutation rate
+    qint64 startTime; // Elapsed time için başlangıç zamanı
 
     std::array<std::array<int, 10>, 10> currentMatrix = {};
     std::array<std::array<int, 10>, 10> finalMatrix = {{
@@ -58,12 +66,6 @@ private:
         {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
     }};
-    std::vector<std::array<std::array<int, 10>, 10>> population;
-    std::array<std::array<int, 10>, 10> bestIndividual;
-    int generation;
-    int populationSize;
-    int maxGenerations;
-    const double mutationRate = 0.02; // 2% mutation rate
 };
 
 #endif // MAINWINDOW_H
