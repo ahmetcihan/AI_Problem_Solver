@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>902</width>
+    <width>900</width>
     <height>624</height>
    </rect>
   </property>
@@ -64,7 +64,7 @@ Input Pattern</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
      </font>
     </property>
    </widget>
@@ -79,7 +79,7 @@ Input Pattern</string>
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
      </font>
     </property>
    </widget>
@@ -289,9 +289,9 @@ Input Pattern</string>
    <widget class="QLabel" name="label_indicator">
     <property name="geometry">
      <rect>
-      <x>340</x>
-      <y>340</y>
-      <width>231</width>
+      <x>330</x>
+      <y>450</y>
+      <width>241</width>
       <height>91</height>
      </rect>
     </property>

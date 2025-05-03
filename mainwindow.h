@@ -27,7 +27,7 @@ public:
 
 public slots:
     void createRandomPattern();
-    void optimizePattern();
+    void startOptimization();
     void nextGeneration();
     void stopOptimization();
 
@@ -37,7 +37,6 @@ private:
     void createPopulation();
     void updateBestIndividual();
     void updateMatrixDisplay();
-    void printMatrix(const std::array<std::array<int, 10>, 10>& matrix);
 
     Ui::MainWindow *ui;
     std::vector<QLabel*> labels;
