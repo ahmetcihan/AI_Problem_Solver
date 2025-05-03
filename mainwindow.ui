@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>900</width>
-    <height>624</height>
+    <height>696</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -59,7 +59,7 @@ Input Pattern</string>
       <x>20</x>
       <y>340</y>
       <width>301</width>
-      <height>201</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="font">
@@ -74,7 +74,7 @@ Input Pattern</string>
       <x>580</x>
       <y>340</y>
       <width>301</width>
-      <height>201</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="font">
@@ -197,7 +197,7 @@ Input Pattern</string>
      <number>1000</number>
     </property>
     <property name="value">
-     <number>50</number>
+     <number>300</number>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -236,10 +236,10 @@ Input Pattern</string>
      <number>10</number>
     </property>
     <property name="maximum">
-     <number>500</number>
+     <number>10000</number>
     </property>
     <property name="value">
-     <number>200</number>
+     <number>500</number>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -290,7 +290,7 @@ Input Pattern</string>
     <property name="geometry">
      <rect>
       <x>330</x>
-      <y>450</y>
+      <y>420</y>
       <width>241</width>
       <height>91</height>
      </rect>
@@ -305,6 +305,35 @@ Input Pattern</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_indicator_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>530</y>
+      <width>861</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>How to Use:
+ 1. Set parameters: 'Loop Interval (ms)' for iteration speed, 'Population Size' for number of matrices, 'Max Generations' for iteration limit. 
+2. Click 'Create Random Pattern' to generate an initial population. 
+3. Press 'Start Optimization' to begin the genetic algorithm. 
+4. Monitor progress via generation count, error, and elapsed time. 
+5. Click 'Stop Optimization' to pause.</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
     </property>
    </widget>
   </widget>
